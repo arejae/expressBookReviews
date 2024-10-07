@@ -44,10 +44,24 @@ const getByISBN = (isbn) => {
 };
   
 // Get book details based on author
-public_users.get('/author/:author',function (req, res) {
-  //Write your code here
-  return res.status(300).json({message: "Yet to be implemented"});
+// Task3
+public_users.get('/author/:author', function (req, res) {
+  const author = req.params.author;
+  
+  getBooks()
+    .then((bookEntries) => Object.values(bookEntries)) // Get the list of books
+    .then((books) => books.filter((book) => book.author === author)) // Filter books by author
+    .then((filteredBooks) => {
+      if (filteredBooks.length === 0) {
+        return res.status(404).json({ message: 'Book not found' }); // Respond with 404 if no books are found
+      }
+      return res.json(filteredBooks); // Otherwise, respond with the filtered books
+    })
+    .catch((err) => {
+      res.status(500).json({ message: 'An error occurred', error: err }); // Handle any potential errors
+    });
 });
+
 
 // Get all books based on title
 public_users.get('/title/:title',function (req, res) {
