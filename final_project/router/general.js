@@ -70,16 +70,25 @@ public_users.get('/author/:author', function (req, res) {
 });
 
 
-// Get all books based on title
+//  Task 4 
+//  Get all books based on title
 public_users.get('/title/:title',function (req, res) {
-  //Write your code here
-  return res.status(300).json({message: "Yet to be implemented"});
+  const title = req.params.title;
+  getBooks()
+  .then((bookEntries) => Object.values(bookEntries))
+  .then((books) => books.filter((book) => book.title === title))
+  .then((filteredBooks) => res.send(filteredBooks));
 });
 
+//  Task 5 
 //  Get book review
 public_users.get('/review/:isbn',function (req, res) {
-  //Write your code here
-  return res.status(300).json({message: "Yet to be implemented"});
+  const isbn = req.params.isbn;
+  getByISBN(req.params.isbn)
+  .then(
+      result => res.send(result.reviews),
+      error => res.status(error.status).json({message: error.message})
+  );
 });
 
 module.exports.general = public_users;
